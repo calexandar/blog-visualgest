@@ -26,8 +26,10 @@ Route::get('/', [PagesController::class, 'index'])->name('home');
 
 Route::resource('/blog',PostController::class)->names(['index'=> 'blog']);
 Route::resource('/comment', CommentController::class);
+Route::get('/markasread/{id}', [CommentController::class, 'markasread'])->name('markasread');
 
 Route::get('/search', [SearchController::class, 'searchQuery'])->name('search');
+
 
 Route::group(['prefix'=>'dashboard', 'middleware'=>['auth', 'verified']], function(){
    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

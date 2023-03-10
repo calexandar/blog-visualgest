@@ -1,7 +1,14 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="w-4/5 mx-auto text-left">
+    @foreach (auth()->user()->unreadnotifications  as $notification)
+        <div class="w-4/5 mx-auto text-left bg-blue-300 p-3 m-2">
+            <b>{{ $notification->data['name'] }}</b><span>  commented on your post !!!</span>
+            <a href="{{ route('markasread', $notification->id) }}" class="p-2 bg-red-400 text-white rounded-lg"> Mark as read</a>
+        </div>
+    @endforeach
+
+    <div class="w-4/5 mx-auto text-left mt-14">
         <div>
             <img src="{{ asset('images/' . $post->image) }}" alt="{{ $post->title }}" >
         </div>

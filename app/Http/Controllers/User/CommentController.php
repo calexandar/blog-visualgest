@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\UserCommentNotification;
 
 class CommentController extends Controller
 {
@@ -45,6 +47,13 @@ class CommentController extends Controller
             'post_id' => $request->input('post_id'), 
         ]);
 
+        $userId = auth()->user()->id;
+        if($userId){
+            $user = User::whereId($userId)->first();
+
+            auth()->user()->notify( new UserCommentNotification($user));
+        }
+
         return redirect()->back()
                 ->with('message', 'Your blog post have been created');
    
@@ -81,5 +90,14 @@ class CommentController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function markasread($id)
+    {
+        if($id){
+            auth()->user()->notifications->where('id', $id)->markasread();
+        }
+
+        return back();
     }
 }
